@@ -22,7 +22,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
+import kotlin.math.log10
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     private fun applyTagsVisibility() {
         val visible = if (showTags()) View.VISIBLE else View.GONE
         binding.tagF1.visibility = visible
+        binding.tagF4.visibility = visible
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -59,14 +62,47 @@ class MainActivity : AppCompatActivity() {
     private var currentFile: java.io.File? = null
     private var startTimeMs: Long = 0L
     private val mainHandler = Handler(Looper.getMainLooper())
+    private val instantPeakSample = AtomicInteger(0)
+    private var peakHoldPct: Int = 0
+    private var holdUntilMs: Long = 0L
     private val timeTicker = object : Runnable {
         override fun run() {
             if (isRecording.get()) {
                 val elapsed = System.currentTimeMillis() - startTimeMs
                 binding.elapsed.text = formatElapsed(elapsed)
+                updateMeter()
                 mainHandler.postDelayed(this, 100L)
             }
         }
+    }
+
+    private fun updateMeter() {
+        val peak = instantPeakSample.get()
+        val pct = (peak * 100 / 32767).coerceIn(0, 100)
+        binding.levelBar.progress = pct
+
+        val now = System.currentTimeMillis()
+        if (pct >= peakHoldPct) {
+            peakHoldPct = pct
+            holdUntilMs = now + 1500
+        } else if (now > holdUntilMs) {
+            peakHoldPct = (peakHoldPct - 2).coerceAtLeast(pct)
+        }
+        binding.levelBar.secondaryProgress = peakHoldPct
+
+        binding.dbfs.text = if (peak <= 0) "— dBFS" else {
+            val db = 20.0 * log10(peak.toDouble() / 32767.0)
+            String.format(Locale.US, "%.1f dBFS", db)
+        }
+    }
+
+    private fun resetMeter() {
+        instantPeakSample.set(0)
+        peakHoldPct = 0
+        holdUntilMs = 0L
+        binding.levelBar.progress = 0
+        binding.levelBar.secondaryProgress = 0
+        binding.dbfs.text = getString(R.string.dbfs_idle)
     }
 
     private val micPermissionLauncher = registerForActivityResult(
@@ -239,8 +275,7 @@ class MainActivity : AppCompatActivity() {
                     val v = abs(buffer[i].toInt())
                     if (v > peak) peak = v
                 }
-                val pct = (peak * 100 / 32767).coerceIn(0, 100)
-                mainHandler.post { binding.levelBar.progress = pct }
+                instantPeakSample.set(peak)
 
                 val bytes = ByteArray(read * 2)
                 for (i in 0 until read) {
@@ -262,7 +297,7 @@ class MainActivity : AppCompatActivity() {
         mainHandler.post {
             val sizeKb = file.length() / 1024
             binding.fileInfo.text = "Saved: ${file.name} — ${sizeKb} KB"
-            binding.levelBar.progress = 0
+            resetMeter()
         }
     }
 

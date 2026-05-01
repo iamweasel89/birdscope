@@ -48,6 +48,26 @@
             android:fontFamily="monospace"
             android:layout_marginTop="16dp" />
 
+        <TextView
+            android:id="@+id/tagF4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="F4"
+            android:textColor="#888888"
+            android:textSize="11sp"
+            android:fontFamily="monospace"
+            android:layout_gravity="start"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/dbfs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dbfs_idle"
+            android:textSize="14sp"
+            android:fontFamily="monospace"
+            android:textColor="#444444" />
+
         <ProgressBar
             android:id="@+id/levelBar"
             style="?android:attr/progressBarStyleHorizontal"
@@ -55,7 +75,8 @@
             android:layout_height="24dp"
             android:max="100"
             android:progress="0"
-            android:layout_marginTop="16dp" />
+            android:secondaryProgress="0"
+            android:layout_marginTop="6dp" />
 
         <Button
             android:id="@+id/recordButton"
