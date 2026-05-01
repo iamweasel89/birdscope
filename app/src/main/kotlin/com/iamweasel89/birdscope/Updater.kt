@@ -31,11 +31,13 @@ const val ACTION_INSTALL_STATUS = "com.iamweasel89.birdscope.INSTALL_STATUS"
 
 class Updater(
     private val ctx: Context,
-    private val onStatus: (String) -> Unit
+    private val onStatus: (String) -> Unit,
+    private val onUpdateAvailable: (latestBuild: Long) -> Unit
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var downloadId: Long? = null
     private var pollJob: Job? = null
+    private var pendingDownloadUrl: String? = null
 
     private fun apkFile(): File {
         val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -45,7 +47,7 @@ class Updater(
     private fun canInstallPackages(): Boolean =
         ctx.packageManager.canRequestPackageInstalls()
 
-    fun checkAndStart() {
+    fun check() {
         scope.launch {
             try {
                 onStatus("Checking…")
@@ -60,13 +62,22 @@ class Updater(
                     onStatus("Up to date (build $installed)")
                     return@launch
                 }
-                onStatus("Update found: build $latest — downloading…")
-                val url = "$RELEASES_BASE/$tag/birdscope.apk"
-                startDownload(url)
+                pendingDownloadUrl = "$RELEASES_BASE/$tag/birdscope.apk"
+                onStatus("Update available: build $latest")
+                onUpdateAvailable(latest)
             } catch (e: Exception) {
                 onStatus("Update error: ${e.message}")
             }
         }
+    }
+
+    fun confirmDownload() {
+        val url = pendingDownloadUrl ?: run {
+            onStatus("No update prepared — tap Check first")
+            return
+        }
+        onStatus("Downloading…")
+        startDownload(url)
     }
 
     private suspend fun fetchLatestTag(): String? = withContext(Dispatchers.IO) {

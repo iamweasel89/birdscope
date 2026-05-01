@@ -67,13 +67,24 @@ class MainActivity : AppCompatActivity() {
             if (isRecording.get()) stopRecording() else requestMicAndStart()
         }
 
-        updater = Updater(this) { status ->
-            runOnUiThread { binding.updateStatus.text = status }
-        }
+        updater = Updater(
+            ctx = this,
+            onStatus = { status -> runOnUiThread { binding.updateStatus.text = status } },
+            onUpdateAvailable = { latest -> runOnUiThread { confirmUpdate(latest) } }
+        )
 
-        binding.updateButton.setOnClickListener { updater.checkAndStart() }
+        binding.updateButton.setOnClickListener { updater.check() }
 
         binding.deleteAllButton.setOnClickListener { confirmDeleteAll() }
+    }
+
+    private fun confirmUpdate(latestBuild: Long) {
+        AlertDialog.Builder(this)
+            .setTitle("Update available")
+            .setMessage("Build $latestBuild is available. Download and install?")
+            .setPositiveButton("Download") { _, _ -> updater.confirmDownload() }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun confirmDeleteAll() {
