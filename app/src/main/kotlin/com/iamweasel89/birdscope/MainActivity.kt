@@ -5,9 +5,13 @@ import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +32,24 @@ class MainActivity : AppCompatActivity() {
         private const val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
         private const val BYTES_PER_SAMPLE = 2
         private const val CHANNELS = 1
+        private const val PREFS = "birdscope_prefs"
+        private const val KEY_SHOW_TAGS = "show_tags"
+    }
+
+    private fun showTags(): Boolean =
+        getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean(KEY_SHOW_TAGS, true)
+
+    private fun setShowTags(value: Boolean) {
+        getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .edit().putBoolean(KEY_SHOW_TAGS, value).apply()
+        applyTagsVisibility()
+    }
+
+    private fun applyTagsVisibility() {
+        val visible = if (showTags()) View.VISIBLE else View.GONE
+        binding.tagF1.visibility = visible
+        binding.tagF2.visibility = visible
+        binding.tagF3.visibility = visible
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -59,6 +81,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setSupportActionBar(binding.toolbar)
+        applyTagsVisibility()
 
         val pi = packageManager.getPackageInfo(packageName, 0)
         binding.buildInfo.text = "Build ${pi.longVersionCode} — ${pi.versionName}"
@@ -111,6 +136,27 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (isRecording.get()) stopRecording()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val item = menu.findItem(R.id.action_toggle_tags)
+        item.title = getString(
+            if (showTags()) R.string.menu_hide_tags else R.string.menu_show_tags
+        )
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.action_toggle_tags) {
+            setShowTags(!showTags())
+            invalidateOptionsMenu()
+            true
+        } else super.onOptionsItemSelected(item)
     }
 
     private fun requestMicAndStart() {

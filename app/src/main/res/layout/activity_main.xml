@@ -1,84 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:gravity="center_horizontal">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/micName"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/mic_unknown"
-        android:textSize="14sp"
-        android:layout_marginTop="8dp" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="@android:color/white"
+        app:title="@string/app_name" />
 
-    <TextView
-        android:id="@+id/elapsed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/elapsed_zero"
-        android:textSize="48sp"
-        android:fontFamily="monospace"
-        android:layout_marginTop="24dp" />
-
-    <ProgressBar
-        android:id="@+id/levelBar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:max="100"
-        android:progress="0"
-        android:layout_marginTop="24dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/recordButton"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:text="@string/start"
-        android:textSize="22sp"
-        android:layout_marginTop="32dp" />
+        <TextView
+            android:id="@+id/tagF1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="F1"
+            android:textColor="#888888"
+            android:textSize="11sp"
+            android:fontFamily="monospace"
+            android:layout_gravity="start"
+            android:layout_marginTop="4dp" />
 
-    <TextView
-        android:id="@+id/fileInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/file_size_none"
-        android:textSize="14sp"
-        android:layout_marginTop="24dp" />
+        <TextView
+            android:id="@+id/micName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mic_unknown"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
 
-    <Button
-        android:id="@+id/deleteAllButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/delete_all"
-        android:layout_marginTop="16dp" />
+        <TextView
+            android:id="@+id/elapsed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/elapsed_zero"
+            android:textSize="48sp"
+            android:fontFamily="monospace"
+            android:layout_marginTop="16dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        <ProgressBar
+            android:id="@+id/levelBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:max="100"
+            android:progress="0"
+            android:layout_marginTop="16dp" />
 
-    <Button
-        android:id="@+id/updateButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/check_update" />
+        <Button
+            android:id="@+id/recordButton"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:text="@string/start"
+            android:textSize="22sp"
+            android:layout_marginTop="24dp" />
 
-    <TextView
-        android:id="@+id/updateStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="13sp"
-        android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/fileInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/file_size_none"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp" />
 
-    <TextView
-        android:id="@+id/buildInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="#888888"
-        android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/tagF2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="F2"
+            android:textColor="#888888"
+            android:textSize="11sp"
+            android:fontFamily="monospace"
+            android:layout_gravity="start"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/deleteAllButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_all"
+            android:layout_marginTop="2dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tagF3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="F3"
+            android:textColor="#888888"
+            android:textSize="11sp"
+            android:fontFamily="monospace"
+            android:layout_gravity="start" />
+
+        <Button
+            android:id="@+id/updateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/check_update"
+            android:layout_marginTop="2dp" />
+
+        <TextView
+            android:id="@+id/updateStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/buildInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#888888"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
 
 </LinearLayout>

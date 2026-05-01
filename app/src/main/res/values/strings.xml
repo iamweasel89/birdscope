@@ -12,4 +12,6 @@
     <string name="delete_confirm_msg">This will permanently delete every WAV file in the app\'s storage.</string>
     <string name="delete_yes">Delete</string>
     <string name="delete_no">Cancel</string>
+    <string name="menu_hide_tags">Hide tags</string>
+    <string name="menu_show_tags">Show tags</string>
 </resources>
