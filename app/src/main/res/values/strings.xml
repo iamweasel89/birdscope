@@ -7,4 +7,9 @@
     <string name="elapsed_zero">00:00.0</string>
     <string name="file_size_none">Last file: —</string>
     <string name="check_update">Check for update</string>
+    <string name="delete_all">Delete all recordings</string>
+    <string name="delete_confirm_title">Delete all recordings?</string>
+    <string name="delete_confirm_msg">This will permanently delete every WAV file in the app\'s storage.</string>
+    <string name="delete_yes">Delete</string>
+    <string name="delete_no">Cancel</string>
 </resources>

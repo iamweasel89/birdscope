@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.iamweasel89.birdscope.databinding.ActivityMainBinding
@@ -71,6 +72,29 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.updateButton.setOnClickListener { updater.checkAndStart() }
+
+        binding.deleteAllButton.setOnClickListener { confirmDeleteAll() }
+    }
+
+    private fun confirmDeleteAll() {
+        if (isRecording.get()) {
+            binding.fileInfo.text = "Stop recording first"
+            return
+        }
+        AlertDialog.Builder(this)
+            .setTitle(R.string.delete_confirm_title)
+            .setMessage(R.string.delete_confirm_msg)
+            .setPositiveButton(R.string.delete_yes) { _, _ -> deleteAllRecordings() }
+            .setNegativeButton(R.string.delete_no, null)
+            .show()
+    }
+
+    private fun deleteAllRecordings() {
+        val dir = java.io.File(filesDir, "recordings")
+        val files = dir.listFiles().orEmpty()
+        var deleted = 0
+        for (f in files) if (f.delete()) deleted++
+        binding.fileInfo.text = "Deleted $deleted file(s)"
     }
 
     override fun onDestroy() {
