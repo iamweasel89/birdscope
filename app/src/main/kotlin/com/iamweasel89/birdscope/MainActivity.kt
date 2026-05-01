@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         binding.tagF1.visibility = visible
         binding.tagF7.visibility = visible
         binding.tagF8.visibility = visible
+        binding.tagF9.visibility = visible
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -98,6 +99,7 @@ class MainActivity : AppCompatActivity() {
         binding.minDbfs.text = getString(R.string.min_init)
         fftAccumLen = 0
         binding.spectrum.clear()
+        binding.phase.clear()
     }
 
     private val micPermissionLauncher = registerForActivityResult(
@@ -294,6 +296,8 @@ class MainActivity : AppCompatActivity() {
                         fftAccumLen = 0
                     }
                 }
+
+                binding.phase.feedSamples(buffer, read)
 
                 val bytes = ByteArray(read * 2)
                 for (i in 0 until read) {

@@ -12,6 +12,7 @@ Permanent IDs. Never reused. New features get the next free number, regardless o
 | F6 | Compact UI (overflow menu) | done | partial | F2 (delete-all) and F3 (update) consolidated into the toolbar overflow menu. |
 | F7 | Max / min dBFS per recording | done | yes | Reset on Start. Max from peak; min only when peak > 0. Frozen on Stop, kept until next Start. |
 | F8 | Live FFT spectrum | done | yes | 2048-point Hann-windowed FFT. Log Hz axis 50 Hz – 12 kHz. dB axis −90..0. ~22 fps. First step of Phase 2. |
+| F9 | Phase portrait | done | yes | s[n−1] vs s[n] on a 2D canvas. Persistence fade (oscilloscope-style). Stacked under F8. Gain ±16 384 → screen edge. |
 
 ## Status meanings
 
