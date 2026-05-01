@@ -14,5 +14,6 @@
     <string name="delete_no">Cancel</string>
     <string name="menu_hide_tags">Hide tags</string>
     <string name="menu_show_tags">Show tags</string>
-    <string name="dbfs_idle">— dBFS</string>
+    <string name="max_init">max —</string>
+    <string name="min_init">min —</string>
 </resources>
