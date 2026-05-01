@@ -48,8 +48,6 @@ class MainActivity : AppCompatActivity() {
     private fun applyTagsVisibility() {
         val visible = if (showTags()) View.VISIBLE else View.GONE
         binding.tagF1.visibility = visible
-        binding.tagF2.visibility = visible
-        binding.tagF3.visibility = visible
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -97,10 +95,6 @@ class MainActivity : AppCompatActivity() {
             onStatus = { status -> runOnUiThread { binding.updateStatus.text = status } },
             onUpdateAvailable = { latest -> runOnUiThread { confirmUpdate(latest) } }
         )
-
-        binding.updateButton.setOnClickListener { updater.check() }
-
-        binding.deleteAllButton.setOnClickListener { confirmDeleteAll() }
     }
 
     private fun confirmUpdate(latestBuild: Long) {
@@ -152,11 +146,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.action_toggle_tags) {
-            setShowTags(!showTags())
-            invalidateOptionsMenu()
-            true
-        } else super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.action_check_update -> { updater.check(); true }
+            R.id.action_delete_all -> { confirmDeleteAll(); true }
+            R.id.action_toggle_tags -> {
+                setShowTags(!showTags())
+                invalidateOptionsMenu()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun requestMicAndStart() {

@@ -73,45 +73,10 @@
             android:textSize="14sp"
             android:layout_marginTop="20dp" />
 
-        <TextView
-            android:id="@+id/tagF2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="F2"
-            android:textColor="#888888"
-            android:textSize="11sp"
-            android:fontFamily="monospace"
-            android:layout_gravity="start"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:id="@+id/deleteAllButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/delete_all"
-            android:layout_marginTop="2dp" />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/tagF3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="F3"
-            android:textColor="#888888"
-            android:textSize="11sp"
-            android:fontFamily="monospace"
-            android:layout_gravity="start" />
-
-        <Button
-            android:id="@+id/updateButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/check_update"
-            android:layout_marginTop="2dp" />
 
         <TextView
             android:id="@+id/updateStatus"
