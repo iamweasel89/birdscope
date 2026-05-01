@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
 import kotlin.math.log10
+import kotlin.math.min
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         private const val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
         private const val BYTES_PER_SAMPLE = 2
         private const val CHANNELS = 1
+        private const val FFT_SIZE = 2048
         private const val PREFS = "birdscope_prefs"
         private const val KEY_SHOW_TAGS = "show_tags"
     }
@@ -51,11 +53,15 @@ class MainActivity : AppCompatActivity() {
     private fun applyTagsVisibility() {
         val visible = if (showTags()) View.VISIBLE else View.GONE
         binding.tagF1.visibility = visible
-        binding.tagF4.visibility = visible
+        binding.tagF7.visibility = visible
+        binding.tagF8.visibility = visible
     }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var updater: Updater
+    private val fftAnalyzer = FftAnalyzer(FFT_SIZE)
+    private val fftAccum = ShortArray(FFT_SIZE)
+    private var fftAccumLen = 0
 
     private val isRecording = AtomicBoolean(false)
     private var recordThread: Thread? = null
@@ -63,47 +69,35 @@ class MainActivity : AppCompatActivity() {
     private var currentFile: java.io.File? = null
     private var startTimeMs: Long = 0L
     private val mainHandler = Handler(Looper.getMainLooper())
-    private val instantPeakSample = AtomicInteger(0)
-    private var peakHoldPct: Int = 0
-    private var holdUntilMs: Long = 0L
+    private val maxPeakSample = AtomicInteger(0)
+    private val minPeakSample = AtomicInteger(Int.MAX_VALUE)
     private val timeTicker = object : Runnable {
         override fun run() {
             if (isRecording.get()) {
                 val elapsed = System.currentTimeMillis() - startTimeMs
                 binding.elapsed.text = formatElapsed(elapsed)
-                updateMeter()
+                updateStats()
                 mainHandler.postDelayed(this, 100L)
             }
         }
     }
 
-    private fun updateMeter() {
-        val peak = instantPeakSample.get()
-        val pct = (peak * 100 / 32767).coerceIn(0, 100)
-        binding.levelBar.progress = pct
-
-        val now = System.currentTimeMillis()
-        if (pct >= peakHoldPct) {
-            peakHoldPct = pct
-            holdUntilMs = now + 1500
-        } else if (now > holdUntilMs) {
-            peakHoldPct = (peakHoldPct - 2).coerceAtLeast(pct)
-        }
-        binding.levelBar.secondaryProgress = peakHoldPct
-
-        binding.dbfs.text = if (peak <= 0) "— dBFS" else {
-            val db = 20.0 * log10(peak.toDouble() / 32767.0)
-            String.format(Locale.US, "%.1f dBFS", db)
-        }
+    private fun updateStats() {
+        val mx = maxPeakSample.get()
+        val mn = minPeakSample.get()
+        binding.maxDbfs.text = if (mx <= 0) getString(R.string.max_init) else
+            String.format(Locale.US, "max %.1f dBFS", 20.0 * log10(mx.toDouble() / 32767.0))
+        binding.minDbfs.text = if (mn == Int.MAX_VALUE) getString(R.string.min_init) else
+            String.format(Locale.US, "min %.1f dBFS", 20.0 * log10(mn.toDouble() / 32767.0))
     }
 
-    private fun resetMeter() {
-        instantPeakSample.set(0)
-        peakHoldPct = 0
-        holdUntilMs = 0L
-        binding.levelBar.progress = 0
-        binding.levelBar.secondaryProgress = 0
-        binding.dbfs.text = getString(R.string.dbfs_idle)
+    private fun resetStats() {
+        maxPeakSample.set(0)
+        minPeakSample.set(Int.MAX_VALUE)
+        binding.maxDbfs.text = getString(R.string.max_init)
+        binding.minDbfs.text = getString(R.string.min_init)
+        fftAccumLen = 0
+        binding.spectrum.clear()
     }
 
     private val micPermissionLauncher = registerForActivityResult(
@@ -240,6 +234,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        resetStats()
+
         binding.micName.text = "Mic: ${micDisplayName(rec)}"
         binding.fileInfo.text = "Recording → ${file.name}"
         binding.recordButton.text = getString(R.string.stop)
@@ -277,7 +273,27 @@ class MainActivity : AppCompatActivity() {
                     val v = abs(buffer[i].toInt())
                     if (v > peak) peak = v
                 }
-                instantPeakSample.set(peak)
+
+                val curMax = maxPeakSample.get()
+                if (peak > curMax) maxPeakSample.set(peak)
+                if (peak > 0) {
+                    val curMin = minPeakSample.get()
+                    if (peak < curMin) minPeakSample.set(peak)
+                }
+
+                var off = 0
+                while (off < read) {
+                    val needed = fftAccum.size - fftAccumLen
+                    val take = min(needed, read - off)
+                    System.arraycopy(buffer, off, fftAccum, fftAccumLen, take)
+                    fftAccumLen += take
+                    off += take
+                    if (fftAccumLen == fftAccum.size) {
+                        val mags = fftAnalyzer.analyze(fftAccum)
+                        binding.spectrum.setSpectrum(mags, SAMPLE_RATE)
+                        fftAccumLen = 0
+                    }
+                }
 
                 val bytes = ByteArray(read * 2)
                 for (i in 0 until read) {
@@ -299,7 +315,7 @@ class MainActivity : AppCompatActivity() {
         mainHandler.post {
             val sizeKb = file.length() / 1024
             binding.fileInfo.text = "Saved: ${file.name} — ${sizeKb} KB"
-            resetMeter()
+            updateStats()
         }
     }
 
