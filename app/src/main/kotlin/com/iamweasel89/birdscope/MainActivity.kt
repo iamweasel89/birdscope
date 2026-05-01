@@ -6,6 +6,7 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -117,6 +118,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+        binding.toolbar.overflowIcon?.setTint(Color.BLACK)
         applyTagsVisibility()
 
         val pi = packageManager.getPackageInfo(packageName, 0)
