@@ -20,9 +20,9 @@ android {
     signingConfigs {
         release {
             storeFile file("dev-release.jks")
-            storePassword "birdscope"
+            storePassword "hexcanvas"
             keyAlias "devkey"
-            keyPassword "birdscope"
+            keyPassword "hexcanvas"
         }
     }
 
