@@ -10,6 +10,11 @@
       "purpose": "external work moving in similar direction: typed knowledge graphs, hierarchical memory, lazy context loading"
     },
     {
+      "ref": "n802",
+      "name": "Purpose discipline",
+      "purpose": "rules and accumulated practice for writing good `purpose` fields in this project"
+    },
+    {
       "ref": "n900",
       "name": "Memory queue",
       "purpose": "deferred work on the memory system itself (extensions, refinements)"
