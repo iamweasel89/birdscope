@@ -11,6 +11,12 @@ descend by `purpose` fields on each link — read only what the task needs.
 hand-maintained snapshot for human operators and contains less detail than
 the leaves. Walk the JSON branches and read leaf markdown directly.
 
+**When delivering changes — file edits, command sequences, commits —
+use the launch-block format from `launch-block.md` (see protocols below).
+Inline diffs and "add this line here" descriptions are not the working
+format here. The operator applies changes by pasting blocks into PowerShell,
+not by editing files manually from your description.**
+
 ### Direct entry URLs
 
 If your fetch tool only follows URLs that appear in prior results,
