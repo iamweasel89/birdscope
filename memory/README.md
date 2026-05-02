@@ -8,6 +8,10 @@ Start at `root.json`. It lists branches with a `purpose` field on each.
 Read each `purpose` and decide whether to descend. Only open files
 whose purpose matches the task at hand.
 
+For a quick visual overview of the whole tree, see `overview.md`.
+It is a hand-maintained snapshot — the JSON and markdown files remain
+the source of truth.
+
 File kinds:
 - **`*.json`** — branch nodes. Metadata + links to other nodes.
 - **`*.md`** — leaf nodes. Actual content with YAML frontmatter.
