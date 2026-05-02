@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "n000",
   "name": "birdscope",
   "purpose": "root node; entry point for any LLM opening this project",
@@ -8,6 +8,11 @@
       "ref": "n001",
       "name": "UI",
       "purpose": "user-facing surface: windows, controls, menus, overlays"
+    },
+    {
+      "ref": "n900",
+      "name": "Memory queue",
+      "purpose": "deferred work on the memory system itself (extensions, refinements)"
     }
   ]
 }
