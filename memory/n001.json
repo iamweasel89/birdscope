@@ -1,0 +1,7 @@
+﻿{
+  "id": "n001",
+  "name": "UI",
+  "purpose": "user-facing surface: windows, controls, menus, overlays",
+  "kind": "branch",
+  "children": []
+}

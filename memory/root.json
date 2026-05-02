@@ -3,5 +3,11 @@
   "name": "birdscope",
   "purpose": "root node; entry point for any LLM opening this project",
   "kind": "branch",
-  "children": []
+  "children": [
+    {
+      "ref": "n001",
+      "name": "UI",
+      "purpose": "user-facing surface: windows, controls, menus, overlays"
+    }
+  ]
 }
