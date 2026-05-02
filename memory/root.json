@@ -15,6 +15,11 @@
       "purpose": "audio subsystem: capture, analysis, visualization (recording, spectrum, phase portrait)"
     },
     {
+      "ref": "n003.json",
+      "name": "Infrastructure",
+      "purpose": "non-feature plumbing: build pipeline, signing, self-updater, anything cross-cutting"
+    },
+    {
       "ref": "n800.json",
       "name": "Memory system development",
       "purpose": "meta-work on the project memory itself: queue of refinements, landscape of similar approaches, design notes"

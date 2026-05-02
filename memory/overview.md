@@ -11,10 +11,12 @@ graph TD
     n000[n000 birdscope]
     n001[n001 UI]
     n002[n002 Audio]
+    n003[n003 Infrastructure]
     n800[n800 Memory system development]
     n201[n201 Recording]
     n202[n202 Spectrum + dBFS]
     n203[n203 Phase portrait]
+    n301[n301 Self-updater]
     n801[n801 Landscape]
     n802[n802 Purpose discipline]
     n803[n803 Scaling reference]
@@ -23,10 +25,12 @@ graph TD
 
     n000 --> n001
     n000 --> n002
+    n000 --> n003
     n000 --> n800
     n002 --> n201
     n002 --> n202
     n002 --> n203
+    n003 --> n301
     n800 --> n801
     n800 --> n802
     n800 --> n803
@@ -43,9 +47,11 @@ graph TD
 | n000 | birdscope         | branch | -        | -        | root node; entry point for any LLM opening this project |
 | n001 | UI                | branch | -        | -        | user-facing surface: windows, controls, menus, overlays |
 | n002 | Audio             | branch | -        | -        | audio subsystem: capture, analysis, visualization |
+| n003 | Infrastructure    | branch | -        | -        | non-feature plumbing: build pipeline, signing, self-updater |
 | n201 | Recording         | leaf   | done     | (commit) | WAV capture + mic name display; first feature beyond updater |
 | n202 | Spectrum + dBFS   | leaf   | done     | (commit) | live FFT spectrum and max/min dBFS readouts during recording |
 | n203 | Phase portrait    | leaf   | done     | (commit) | delay-embedded 2D scatter visualization of the audio signal |
+| n301 | Self-updater      | leaf   | done     | (commit) | in-app updater that fetches latest GitHub release and installs the APK |
 
 ### Memory system development
 

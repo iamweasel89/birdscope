@@ -1,0 +1,13 @@
+{
+  "id": "n003",
+  "name": "Infrastructure",
+  "purpose": "non-feature plumbing: build pipeline, signing, self-updater, cross-cutting concerns",
+  "kind": "branch",
+  "children": [
+    {
+      "ref": "n301.md",
+      "name": "Self-updater",
+      "purpose": "in-app updater: checks GitHub releases, downloads APK, installs via PackageInstaller; read when changing update flow or hitting permission errors"
+    }
+  ]
+}
