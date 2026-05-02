@@ -15,6 +15,11 @@
       "purpose": "rules and accumulated practice for writing good `purpose` fields in this project"
     },
     {
+      "ref": "n803",
+      "name": "Scaling reference",
+      "purpose": "reference for what to do as memory grows: staleness, duplicates, hidden content. revisit when memory has 30+ nodes or after 2026-08-31"
+    },
+    {
       "ref": "n900",
       "name": "Memory queue",
       "purpose": "deferred work on the memory system itself (extensions, refinements)"
