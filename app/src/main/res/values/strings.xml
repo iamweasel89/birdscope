@@ -7,4 +7,6 @@
     <string name="mic_unknown">Mic: (none)</string>
     <string name="elapsed_zero">00:00.0</string>
     <string name="file_size_none">Last file: -</string>
+    <string name="max_init">max -</string>
+    <string name="min_init">min -</string>
 </resources>

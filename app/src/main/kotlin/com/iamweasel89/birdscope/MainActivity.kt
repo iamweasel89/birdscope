@@ -18,6 +18,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.abs
+import kotlin.math.log10
+import kotlin.math.min
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         private const val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
         private const val BYTES_PER_SAMPLE = 2
         private const val CHANNELS = 1
+        // n202: FFT window size
+        private const val FFT_SIZE = 2048
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -40,14 +46,42 @@ class MainActivity : AppCompatActivity() {
     private var startTimeMs: Long = 0L
     private val mainHandler = Handler(Looper.getMainLooper())
 
+    // n202: FFT + stats
+    private val fftAnalyzer = FftAnalyzer(FFT_SIZE)
+    private val fftAccum = ShortArray(FFT_SIZE)
+    private var fftAccumLen = 0
+    private val maxPeakSample = AtomicInteger(0)
+    private val minPeakSample = AtomicInteger(Int.MAX_VALUE)
+
     private val timeTicker = object : Runnable {
         override fun run() {
             if (isRecording.get()) {
                 val elapsed = System.currentTimeMillis() - startTimeMs
                 binding.elapsed.text = formatElapsed(elapsed)
+                updateStats() // n202
                 mainHandler.postDelayed(this, 100L)
             }
         }
+    }
+
+    // n202: dBFS readouts
+    private fun updateStats() {
+        val mx = maxPeakSample.get()
+        val mn = minPeakSample.get()
+        binding.maxDbfs.text = if (mx <= 0) getString(R.string.max_init) else
+            String.format(Locale.US, "max %.1f dBFS", 20.0 * log10(mx.toDouble() / 32767.0))
+        binding.minDbfs.text = if (mn == Int.MAX_VALUE) getString(R.string.min_init) else
+            String.format(Locale.US, "min %.1f dBFS", 20.0 * log10(mn.toDouble() / 32767.0))
+    }
+
+    // n202: reset before each recording
+    private fun resetStats() {
+        maxPeakSample.set(0)
+        minPeakSample.set(Int.MAX_VALUE)
+        binding.maxDbfs.text = getString(R.string.max_init)
+        binding.minDbfs.text = getString(R.string.min_init)
+        fftAccumLen = 0
+        binding.spectrum.clear()
     }
 
     private val micPermissionLauncher = registerForActivityResult(
@@ -137,6 +171,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        resetStats() // n202
+
         binding.micName.text = "Mic: " + micDisplayName(rec)
         binding.fileInfo.text = "Recording -> " + file.name
         binding.recordButton.text = getString(R.string.stop)
@@ -157,7 +193,7 @@ class MainActivity : AppCompatActivity() {
         return dev.productName?.toString() ?: "default"
     }
 
-    // n201: WAV writer
+    // n201 + n202: WAV writer with peak tracking and FFT analysis
     private fun writePcmToWav(file: java.io.File, rec: AudioRecord, bufSize: Int) {
         val raf = RandomAccessFile(file, "rw")
         try {
@@ -171,6 +207,35 @@ class MainActivity : AppCompatActivity() {
                 val read = rec.read(buffer, 0, buffer.size)
                 if (read <= 0) continue
 
+                // n202: peak tracking
+                var peak = 0
+                for (i in 0 until read) {
+                    val v = abs(buffer[i].toInt())
+                    if (v > peak) peak = v
+                }
+                val curMax = maxPeakSample.get()
+                if (peak > curMax) maxPeakSample.set(peak)
+                if (peak > 0) {
+                    val curMin = minPeakSample.get()
+                    if (peak < curMin) minPeakSample.set(peak)
+                }
+
+                // n202: FFT accumulator
+                var off = 0
+                while (off < read) {
+                    val needed = fftAccum.size - fftAccumLen
+                    val take = min(needed, read - off)
+                    System.arraycopy(buffer, off, fftAccum, fftAccumLen, take)
+                    fftAccumLen += take
+                    off += take
+                    if (fftAccumLen == fftAccum.size) {
+                        val mags = fftAnalyzer.analyze(fftAccum)
+                        binding.spectrum.setSpectrum(mags, SAMPLE_RATE)
+                        fftAccumLen = 0
+                    }
+                }
+
+                // n201: write samples to WAV
                 val bytes = ByteArray(read * 2)
                 for (i in 0 until read) {
                     val s = buffer[i].toInt()
@@ -191,6 +256,7 @@ class MainActivity : AppCompatActivity() {
         mainHandler.post {
             val sizeKb = file.length() / 1024
             binding.fileInfo.text = "Saved: " + file.name + " - " + sizeKb + " KB"
+            updateStats()
         }
     }
 
