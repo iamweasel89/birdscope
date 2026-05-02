@@ -8,6 +8,7 @@ import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         private const val CHANNELS = 1
         // n202: FFT window size
         private const val FFT_SIZE = 2048
+        // n203: phase portrait window size
+        private const val PHASE_SIZE = 1024
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -52,6 +55,13 @@ class MainActivity : AppCompatActivity() {
     private var fftAccumLen = 0
     private val maxPeakSample = AtomicInteger(0)
     private val minPeakSample = AtomicInteger(Int.MAX_VALUE)
+
+    // n203: phase portrait accumulator
+    private val phaseAccum = ShortArray(PHASE_SIZE)
+    private var phaseAccumLen = 0
+
+    // n203: which view is shown
+    private var phaseMode = false
 
     private val timeTicker = object : Runnable {
         override fun run() {
@@ -74,14 +84,16 @@ class MainActivity : AppCompatActivity() {
             String.format(Locale.US, "min %.1f dBFS", 20.0 * log10(mn.toDouble() / 32767.0))
     }
 
-    // n202: reset before each recording
+    // n202 + n203: reset before each recording
     private fun resetStats() {
         maxPeakSample.set(0)
         minPeakSample.set(Int.MAX_VALUE)
         binding.maxDbfs.text = getString(R.string.max_init)
         binding.minDbfs.text = getString(R.string.min_init)
         fftAccumLen = 0
+        phaseAccumLen = 0
         binding.spectrum.clear()
+        binding.phasePortrait.clear()
     }
 
     private val micPermissionLauncher = registerForActivityResult(
@@ -103,6 +115,13 @@ class MainActivity : AppCompatActivity() {
             if (isRecording.get()) stopRecording() else requestMicAndStart()
         }
 
+        // n203: toggle between spectrum and phase portrait
+        binding.togglePhaseButton.setOnClickListener {
+            phaseMode = !phaseMode
+            applyVisualizationMode()
+        }
+        applyVisualizationMode()
+
         // updater
         updater = Updater(
             ctx = this,
@@ -110,6 +129,19 @@ class MainActivity : AppCompatActivity() {
             onUpdateAvailable = { latest -> runOnUiThread { confirmUpdate(latest) } }
         )
         binding.checkUpdateButton.setOnClickListener { updater.check() }
+    }
+
+    // n203
+    private fun applyVisualizationMode() {
+        if (phaseMode) {
+            binding.spectrum.visibility = View.GONE
+            binding.phasePortrait.visibility = View.VISIBLE
+            binding.togglePhaseButton.text = getString(R.string.show_spectrum)
+        } else {
+            binding.spectrum.visibility = View.VISIBLE
+            binding.phasePortrait.visibility = View.GONE
+            binding.togglePhaseButton.text = getString(R.string.show_phase)
+        }
     }
 
     override fun onDestroy() {
@@ -171,7 +203,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        resetStats() // n202
+        resetStats()
 
         binding.micName.text = "Mic: " + micDisplayName(rec)
         binding.fileInfo.text = "Recording -> " + file.name
@@ -193,7 +225,7 @@ class MainActivity : AppCompatActivity() {
         return dev.productName?.toString() ?: "default"
     }
 
-    // n201 + n202: WAV writer with peak tracking and FFT analysis
+    // n201 + n202 + n203: WAV writer with peak tracking, FFT, phase portrait
     private fun writePcmToWav(file: java.io.File, rec: AudioRecord, bufSize: Int) {
         val raf = RandomAccessFile(file, "rw")
         try {
@@ -232,6 +264,20 @@ class MainActivity : AppCompatActivity() {
                         val mags = fftAnalyzer.analyze(fftAccum)
                         binding.spectrum.setSpectrum(mags, SAMPLE_RATE)
                         fftAccumLen = 0
+                    }
+                }
+
+                // n203: phase accumulator
+                var poff = 0
+                while (poff < read) {
+                    val pneeded = phaseAccum.size - phaseAccumLen
+                    val ptake = min(pneeded, read - poff)
+                    System.arraycopy(buffer, poff, phaseAccum, phaseAccumLen, ptake)
+                    phaseAccumLen += ptake
+                    poff += ptake
+                    if (phaseAccumLen == phaseAccum.size) {
+                        binding.phasePortrait.setSamples(phaseAccum)
+                        phaseAccumLen = 0
                     }
                 }
 

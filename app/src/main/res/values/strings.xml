@@ -9,4 +9,6 @@
     <string name="file_size_none">Last file: -</string>
     <string name="max_init">max -</string>
     <string name="min_init">min -</string>
+    <string name="show_phase">Show phase portrait</string>
+    <string name="show_spectrum">Show spectrum</string>
 </resources>

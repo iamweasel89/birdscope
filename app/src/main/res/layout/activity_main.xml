@@ -59,13 +59,33 @@
             android:gravity="end" />
     </LinearLayout>
 
-    <com.iamweasel89.birdscope.SpectrumView
-        android:id="@+id/spectrum"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="8dp"
-        android:minHeight="160dp" />
+        android:layout_marginTop="8dp">
+
+        <com.iamweasel89.birdscope.SpectrumView
+            android:id="@+id/spectrum"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="160dp" />
+
+        <com.iamweasel89.birdscope.PhasePortraitView
+            android:id="@+id/phasePortrait"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="160dp"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/togglePhaseButton"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/show_phase"
+        android:textSize="13sp"
+        android:layout_marginTop="6dp" />
 
     <Button
         android:id="@+id/recordButton"
@@ -73,7 +93,7 @@
         android:layout_height="64dp"
         android:text="@string/start"
         android:textSize="20sp"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/fileInfo"
