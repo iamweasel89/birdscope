@@ -15,7 +15,11 @@ class PhasePortraitView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private val tau = 8
+    // n203: tau in samples; with decimation step = 4 below, effective
+    // delay between drawn points is tau samples at original rate
+    private val tau = 32
+    private val step = 4 // decimation: draw every 4th sample
+
     private var samples: ShortArray? = null
 
     // n203: smoothed peak amplitude across windows; floor 1500 to avoid
@@ -42,7 +46,6 @@ class PhasePortraitView @JvmOverloads constructor(
     fun setSamples(buf: ShortArray) {
         samples = buf.copyOf()
 
-        // update smoothed peak
         var peak = 0
         for (s in buf) {
             val v = if (s < 0) -s.toInt() else s.toInt()
@@ -68,23 +71,21 @@ class PhasePortraitView @JvmOverloads constructor(
 
         canvas.drawRect(0f, 0f, w, h, bgPaint)
 
-        // axes through center
         canvas.drawLine(0f, h / 2f, w, h / 2f, axisPaint)
         canvas.drawLine(w / 2f, 0f, w / 2f, h, axisPaint)
 
         val s = samples ?: return
-        if (s.size <= tau + 1) return
+        if (s.size <= tau + step) return
 
         val cx = w / 2f
         val cy = h / 2f
-        // scale so smoothedPeak reaches 90% of half-extent
         val halfExtent = kotlin.math.min(w, h) / 2f
         val scale = (halfExtent * 0.9f) / smoothedPeak
 
         var prevX = cx + s[0].toInt() * scale
         var prevY = cy - s[tau].toInt() * scale
 
-        var i = 1
+        var i = step
         val end = s.size - tau
         while (i < end) {
             val x = cx + s[i].toInt() * scale
@@ -92,7 +93,7 @@ class PhasePortraitView @JvmOverloads constructor(
             canvas.drawLine(prevX, prevY, x, y, linePaint)
             prevX = x
             prevY = y
-            i++
+            i += step
         }
     }
 }

@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         // n202: FFT window size
         private const val FFT_SIZE = 2048
         // n203: phase portrait window size
-        private const val PHASE_SIZE = 1024
+        private const val PHASE_SIZE = 4096
     }
 
     private lateinit var binding: ActivityMainBinding
