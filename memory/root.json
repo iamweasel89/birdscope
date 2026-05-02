@@ -1,0 +1,7 @@
+﻿{
+  "id": "n000",
+  "name": "birdscope",
+  "purpose": "root node; entry point for any LLM opening this project",
+  "kind": "branch",
+  "children": []
+}
