@@ -16,6 +16,7 @@ External protocols this project follows ([protocols repo](https://github.com/iam
 - **`project-memory.md`** — format of the `memory/` folder (read first).
 - **`dates-discipline.md`** — honesty rules for any date written into a file.
 - **`mobile-app-android.md`** — build pipeline, signing, in-app updater pattern.
+- **`launch-block.md`** — format for ready-to-run command blocks (the operator works this way).
 
 Note: this README does **not** describe the current feature set. The feature
 set lives in `memory/`, where it stays current. Do not infer from this
