@@ -24,8 +24,8 @@ class PhasePortraitView @JvmOverloads constructor(
 
     // n203: smoothed peak amplitude across windows; floor 1500 to avoid
     // stretching pure noise to full screen during silence
-    private var smoothedPeak: Float = 1500f
-    private val peakFloor = 1500f
+    private var smoothedPeak: Float = 500f
+    private val peakFloor = 500f
     private val peakSmoothing = 0.85f
 
     private val bgPaint = Paint().apply {
