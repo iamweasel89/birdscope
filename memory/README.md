@@ -19,6 +19,9 @@ IDs are neutral (`n001`, `n800`); semantics live in `name` and `purpose` fields.
 
 Full specification: `project-memory.md` in the [protocols repo](https://github.com/iamweasel89/protocols).
 
-## Project-specific conventions
+## Conventions used here
 
-See `n802.md` for this project's discipline of `purpose` formulations.
+- **Purpose formulations:** see `n802.md` for project-local rules.
+- **Dates:** any date written into a leaf (`last_verified`, `review_after`,
+  free-text dates) follows `dates-discipline.md` in the protocols repo —
+  no invented timestamps, checkable source, staleness needs a plan.
