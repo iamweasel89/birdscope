@@ -6,7 +6,12 @@ Android app for recording and observing bird songs.
 
 State of the project lives in `memory/`. Start at `memory/root.json` and
 descend by `purpose` fields on each link — read only what the task needs.
-Format spec: `project-memory.md` in the `protocols` repo.
+
+External protocols this project follows ([protocols repo](https://github.com/iamweasel89/protocols)):
+
+- **`project-memory.md`** — format of the `memory/` folder (read first).
+- **`dates-discipline.md`** — honesty rules for any date written into a file.
+- **`mobile-app-android.md`** — build pipeline, signing, in-app updater pattern.
 
 ## Status
 
