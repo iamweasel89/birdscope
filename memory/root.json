@@ -5,17 +5,17 @@
   "kind": "branch",
   "children": [
     {
-      "ref": "n001",
+      "ref": "n001.json",
       "name": "UI",
       "purpose": "user-facing surface: windows, controls, menus, overlays"
     },
     {
-      "ref": "n002",
+      "ref": "n002.json",
       "name": "Audio",
       "purpose": "audio subsystem: capture, analysis, visualization (recording, spectrum, phase portrait)"
     },
     {
-      "ref": "n800",
+      "ref": "n800.json",
       "name": "Memory system development",
       "purpose": "meta-work on the project memory itself: queue of refinements, landscape of similar approaches, design notes"
     }

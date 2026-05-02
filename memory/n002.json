@@ -5,17 +5,17 @@
   "kind": "branch",
   "children": [
     {
-      "ref": "n201",
+      "ref": "n201.md",
       "name": "Recording",
       "purpose": "WAV capture + mic name display; read when working on recording pipeline or its UI"
     },
     {
-      "ref": "n202",
+      "ref": "n202.md",
       "name": "Spectrum + dBFS stats",
       "purpose": "live FFT spectrum and max/min dBFS readouts; read when working on analysis or its UI"
     },
     {
-      "ref": "n203",
+      "ref": "n203.md",
       "name": "Phase portrait",
       "purpose": "delay-embedded 2D visualization of signal; read when designing or implementing it"
     }

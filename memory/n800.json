@@ -5,27 +5,27 @@
   "kind": "branch",
   "children": [
     {
-      "ref": "n801",
+      "ref": "n801.md",
       "name": "Landscape of similar approaches",
       "purpose": "external work moving in similar direction: typed knowledge graphs, hierarchical memory, lazy context loading"
     },
     {
-      "ref": "n802",
+      "ref": "n802.md",
       "name": "Purpose discipline",
       "purpose": "rules and accumulated practice for writing good `purpose` fields in this project"
     },
     {
-      "ref": "n803",
+      "ref": "n803.md",
       "name": "Scaling reference",
       "purpose": "reference for what to do as memory grows: staleness, duplicates, hidden content. revisit when memory has 30+ nodes or after 2026-08-31"
     },
     {
-      "ref": "n804",
+      "ref": "n804.md",
       "name": "Memory readability tests",
       "purpose": "log of probes from fresh LLM sessions; surfaces gaps in the README/memory pointers"
     },
     {
-      "ref": "n900",
+      "ref": "n900.md",
       "name": "Memory queue",
       "purpose": "deferred work on the memory system itself (extensions, refinements)"
     }
