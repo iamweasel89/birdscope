@@ -1,0 +1,18 @@
+{
+  "id": "n800",
+  "name": "Memory system development",
+  "purpose": "meta-branch: work on the memory system itself, separate from product features",
+  "kind": "branch",
+  "children": [
+    {
+      "ref": "n801",
+      "name": "Landscape of similar approaches",
+      "purpose": "external work moving in similar direction: typed knowledge graphs, hierarchical memory, lazy context loading"
+    },
+    {
+      "ref": "n900",
+      "name": "Memory queue",
+      "purpose": "deferred work on the memory system itself (extensions, refinements)"
+    }
+  ]
+}

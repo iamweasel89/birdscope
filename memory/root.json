@@ -10,9 +10,9 @@
       "purpose": "user-facing surface: windows, controls, menus, overlays"
     },
     {
-      "ref": "n900",
-      "name": "Memory queue",
-      "purpose": "deferred work on the memory system itself (extensions, refinements)"
+      "ref": "n800",
+      "name": "Memory system development",
+      "purpose": "meta-work on the project memory itself: queue of refinements, landscape of similar approaches, design notes"
     }
   ]
 }
