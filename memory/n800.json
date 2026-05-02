@@ -20,6 +20,11 @@
       "purpose": "reference for what to do as memory grows: staleness, duplicates, hidden content. revisit when memory has 30+ nodes or after 2026-08-31"
     },
     {
+      "ref": "n804",
+      "name": "Memory readability tests",
+      "purpose": "log of probes from fresh LLM sessions; surfaces gaps in the README/memory pointers"
+    },
+    {
       "ref": "n900",
       "name": "Memory queue",
       "purpose": "deferred work on the memory system itself (extensions, refinements)"

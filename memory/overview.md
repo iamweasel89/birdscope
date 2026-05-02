@@ -18,6 +18,7 @@ graph TD
     n801[n801 Landscape]
     n802[n802 Purpose discipline]
     n803[n803 Scaling reference]
+    n804[n804 Readability tests]
     n900[n900 Memory queue]
 
     n000 --> n001
@@ -29,6 +30,7 @@ graph TD
     n800 --> n801
     n800 --> n802
     n800 --> n803
+    n800 --> n804
     n800 --> n900
 ```
 
@@ -53,6 +55,7 @@ graph TD
 | n801 | Landscape             | leaf | open     | external work moving in similar direction |
 | n802 | Purpose discipline    | leaf | open     | rules for writing good `purpose` fields |
 | n803 | Scaling reference     | leaf | deferred | what to do as memory grows; revisit when 30+ nodes or after 2026-08-31 |
+| n804 | Readability tests     | leaf | open     | log of probes from fresh LLM sessions |
 | n900 | Memory queue          | leaf | open     | deferred work on the memory system itself |
 
 ## How to update
