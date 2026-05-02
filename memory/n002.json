@@ -1,0 +1,23 @@
+{
+  "id": "n002",
+  "name": "Audio",
+  "purpose": "audio subsystem branch: capture, analysis, visualization",
+  "kind": "branch",
+  "children": [
+    {
+      "ref": "n201",
+      "name": "Recording",
+      "purpose": "WAV capture + mic name display; read when working on recording pipeline or its UI"
+    },
+    {
+      "ref": "n202",
+      "name": "Spectrum + dBFS stats",
+      "purpose": "live FFT spectrum and max/min dBFS readouts; read when working on analysis or its UI"
+    },
+    {
+      "ref": "n203",
+      "name": "Phase portrait",
+      "purpose": "delay-embedded 2D visualization of signal; read when designing or implementing it"
+    }
+  ]
+}
