@@ -6,7 +6,10 @@ Android app for recording and observing bird songs.
 
 State of the project lives in `memory/`. Start at `memory/root.json` and
 descend by `purpose` fields on each link — read only what the task needs.
-For a quick visual overview of the whole tree, see `memory/overview.md`.
+
+**Do not use `memory/overview.md` as your entry point.** It is a
+hand-maintained snapshot for human operators and contains less detail than
+the leaves. Walk the JSON branches and read leaf markdown directly.
 
 External protocols this project follows ([protocols repo](https://github.com/iamweasel89/protocols)):
 
@@ -14,7 +17,7 @@ External protocols this project follows ([protocols repo](https://github.com/iam
 - **`dates-discipline.md`** — honesty rules for any date written into a file.
 - **`mobile-app-android.md`** — build pipeline, signing, in-app updater pattern.
 
-Note: the README does **not** describe the current feature set. The feature
+Note: this README does **not** describe the current feature set. The feature
 set lives in `memory/`, where it stays current. Do not infer from this
 README what the app does today — read `memory/root.json` and descend.
 
