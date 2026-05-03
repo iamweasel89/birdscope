@@ -16,31 +16,25 @@ graph TD
     n000[n000 birdscope]
     n001[n001 UI]
     n002[n002 Audio]
-    n003[n003 Infrastructure]
-    n800[n800 Memory system development]
     n201[n201 Recording]
-    n202[n202 Spectrum + dBFS]
+    n202[n202 Spectrum + dBFS stats]
     n203[n203 Phase portrait]
+    n003[n003 Infrastructure]
     n301[n301 Self-updater]
-    n801[n801 Landscape]
+    n800["n800 Memory system development (project-local)"]
     n802[n802 Purpose discipline]
-    n803[n803 Scaling reference]
-    n804[n804 Readability tests]
-    n900[n900 Memory queue]
+    n804[n804 Memory readability tests]
 
     n000 --> n001
     n000 --> n002
-    n000 --> n003
-    n000 --> n800
     n002 --> n201
     n002 --> n202
     n002 --> n203
+    n000 --> n003
     n003 --> n301
-    n800 --> n801
+    n000 --> n800
     n800 --> n802
-    n800 --> n803
     n800 --> n804
-    n800 --> n900
 ```
 
 ## Nodes
