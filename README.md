@@ -17,18 +17,22 @@ Inline diffs and "add this line here" descriptions are not the working
 format here. The operator applies changes by pasting blocks into PowerShell,
 not by editing files manually from your description.**
 
-### Direct entry URLs
+### Entry URLs (use these to start)
 
-If your fetch tool only follows URLs that appear in prior results,
-these are the entry points to seed your fetcher with:
+Most fetch tools have URL restrictions. Start with these — do not
+try to compose URLs yourself before seeing one:
 
 - https://raw.githubusercontent.com/iamweasel89/birdscope/main/memory/root.json
 - https://raw.githubusercontent.com/iamweasel89/birdscope/main/memory/overview.md
 
-From `root.json` you will find `ref` values like `n001.json`, `n002.json`, etc.
-Read each by replacing the filename in the URL above:
-`.../main/memory/n001.json`, `.../main/memory/n002.json`, `.../main/memory/n201.md`,
+`root.json` lists `ref` values like `n001.json`, `n002.json`, etc.
+For each `ref` you decide to follow, fetch by replacing the filename
+in the URL above: `.../main/memory/n001.json`, `.../main/memory/n201.md`,
 and so on. Every node file lives flat under `memory/`.
+
+If a fetch returns 404 despite the file existing on GitHub, see
+`https://raw.githubusercontent.com/iamweasel89/protocols/main/fetching.md`
+before reporting failure.
 
 ### Source code direct URLs
 
